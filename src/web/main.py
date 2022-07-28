@@ -1,4 +1,7 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect,Response,make_response
+import json
+import os
+
 app = Flask(__name__)
 
 
@@ -16,10 +19,57 @@ def get_vuldetail(vulid):
   
   return render_template('vuldetail.jinja2', vulid=vulid)
 
+
+# Get the json format list of available vulhub 
+@app.route('/list',methods=['GET'])
+def list_vuls():
+    dirs = [('./vulnerability',0)]
+    output = []
+
+    for d, layer in dirs:
+      app.logger.info(f' test dir {d}')
+      if not os.path.isdir(d):
+        app.logger.info(f'not dir {d}')
+        continue
+      for subd in os.listdir(d):
+        app.logger.debug(f'input {subd=}')
+        dirs.append((f'{d}/{subd}', layer+1))  
+      # TODO maybe not layer 2?
+      if layer == 2:
+        output.append(d)
+
+    return json.dumps(output)
+
+
+# get list of running/upping vultargets
 @app.route('/vultargets', methods=['GET'])
 def get_vultargets():
   pass
 
+
+# Create vultarget
 @app.route('/vultarget', methods=['POST'])
 def create_vultarget():
   pass
+
+
+
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return_result = {'code': 404, 'Success': False,
+                     "Message": "The website is not available currently"}
+    return jsonify(return_result), 404
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return_result = {'code': 403, 'Success': False,
+                     "Message": "The website is not available currently"}
+    return jsonify(return_result), 403
+
+
+
+if __name__ == "__main__":
+    app.run(host="::",port=5000)
