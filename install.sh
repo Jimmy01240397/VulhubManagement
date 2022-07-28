@@ -100,6 +100,8 @@ then
 	wget https://github.com/mikefarah/yq/releases/download/v4.17.2/yq_linux_${arch}.tar.gz -O - | tar xz && sudo mv yq_linux_${arch} /usr/local/bin/yq
 fi
 
+git submodule update
+
 configdir=/etc/vulnhubmanagement
 
 set +e
