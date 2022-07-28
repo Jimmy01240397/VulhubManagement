@@ -107,7 +107,7 @@ sudo mkdir $configdir 2> /dev/null
 set -e
 
 # something must
-for filename in requirements.txt .gitignore
+for filename in requirements.txt .gitignore vulnhubmanagement.sh vulnhub
 do
 	sudo cp -r $filename $configdir
 done

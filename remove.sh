@@ -9,7 +9,7 @@ sudo rm /etc/systemd/system/$a.service
 configdir=/etc/vulnhubmanagement
 
 # something need to delete
-for filename in __pycache__ requirements.txt venv .gitignore
+for filename in __pycache__ requirements.txt venv .gitignore vulnhubmanagement.sh vulnhub
 do
 	sudo rm -r $configdir/$filename
 done
