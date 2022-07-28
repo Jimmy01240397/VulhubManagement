@@ -22,6 +22,7 @@ services:
     privileged: true
     environment:
       - REDIS_HOST=redis
+      - VULS_ROOT=/app/vulnerability
     volumes:
       - ./src:/app/src
       - ./vulnerability/:/app/vulnerability

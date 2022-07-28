@@ -9,3 +9,5 @@ REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 
 QUEUES = [COMPOSER_NAME]
+
+VULS_ROOT = os.environ.get('VULS_ROOT', f'{__file__}/../../vulnerability')
