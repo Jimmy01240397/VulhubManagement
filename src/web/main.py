@@ -27,12 +27,9 @@ def list_vuls():
     output = []
 
     for d, layer in dirs:
-      app.logger.info(f' test dir {d}')
       if not os.path.isdir(d):
-        app.logger.info(f'not dir {d}')
         continue
       for subd in os.listdir(d):
-        app.logger.debug(f'input {subd=}')
         dirs.append((f'{d}/{subd}', layer+1))  
       # TODO maybe not layer 2?
       if layer == 2:
