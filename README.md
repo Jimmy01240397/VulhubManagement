@@ -73,3 +73,13 @@ nothing to commit, working tree clean
 2. Run `docker compose -f docker-compose-dev.yml up`
 
 3. If success, you should see the page `http://127.0.0.1:5000/hello`
+
+### Developer Guide
+
+- [Spec](https://hackmd.io/MNalg0W3QLGOcEBKDsSD1g?both)
+  - Add name to the feature you are working.
+- flask app should get any environment variables from `src/config.py`
+- Run `docker exec -it -rm vulhubManagement /bin/sh` to get a shell inside the web container.
+- Only mount `src/` and `vulnerability/` in container, and any change under them will trigger the flask to reload
+  - Any change outside them would not take effect. You should run `docker compose -f docker-compose-dev.yml build` to rebuild it.
+  - TODO: make python dependency sync between host and container.
