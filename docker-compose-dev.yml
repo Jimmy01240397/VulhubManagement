@@ -8,11 +8,12 @@ services:
   app:
     container_name: vulhubManagement
     environment:
-      - FLASK_APP=/app/web/main
+      - FLASK_APP=/app/src/web/main
       - FLASK_ENV=development
     build:
       context: .
     ports:
       - 5000:5000
     volumes:
-      - ./src/:/app
+      - ./src:/app/src
+      - ./vulnerability/:/app/vulnerability
