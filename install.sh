@@ -91,7 +91,7 @@ INSTALL_PYTHON_PATH=python${INSTALL_PYTHON_VERSION:-3.7}
 
 echo "Python version is $INSTALL_PYTHON_VERSION"
 
-#sudo apt-get install -y 
+sudo apt-get install -y docker.io
 
 arch=$(dpkg --print-architecture)
 
@@ -109,7 +109,7 @@ sudo mkdir $configdir 2> /dev/null
 set -e
 
 # something must
-for filename in requirements.txt .gitignore vulhubmanagement.sh vulnerability
+for filename in requirements.txt .gitignore vulhubmanagement.sh vulhubmanagement.py vulnerability
 do
 	sudo cp -r $filename $configdir
 done
