@@ -1,11 +1,11 @@
 #!/bin/bash
 cd /tmp
 
-rm -r VulnhubManagement
+rm -r VulhubManagement
 
-git clone https://github.com/Jimmy01240397/VulnhubManagement
+git clone https://github.com/Jimmy01240397/VulhubManagement
 
-cd VulnhubManagement
+cd VulhubManagement
 
 systemd=$(ls systemd)
 
@@ -18,7 +18,7 @@ do
     fi
 done
 
-configdir=/etc/vulnhubmanagement
+configdir=/etc/vulhubmanagement
 
 for a in $(ls -a $configdir)
 do

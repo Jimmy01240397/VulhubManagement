@@ -1,15 +1,15 @@
 #!/bin/bash
 
-sudo systemctl stop vulnhubmanagement.service
-sudo systemctl disable vulnhubmanagement.service
+sudo systemctl stop vulhubmanagement.service
+sudo systemctl disable vulhubmanagement.service
 
 for a in $(ls systemd)
 sudo rm /etc/systemd/system/$a.service
 
-configdir=/etc/vulnhubmanagement
+configdir=/etc/vulhubmanagement
 
 # something need to delete
-for filename in __pycache__ requirements.txt venv .gitignore vulnhubmanagement.sh vulnhub
+for filename in __pycache__ requirements.txt venv .gitignore vulhubmanagement.sh vulnerability
 do
 	sudo rm -r $configdir/$filename
 done
@@ -24,7 +24,7 @@ fi
 
 echo ""
 echo ""
-echo "Vulnhub Management Service remove.sh complete."
+echo "Vulhub Management Service remove.sh complete."
 
 for filename in server.key server.crt
 do

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo systemctl stop vulnhubmanagement.service
+sudo systemctl stop vulhubmanagement.service
 
 set -e
 UBUNTU=false
@@ -102,14 +102,14 @@ fi
 
 git submodule update
 
-configdir=/etc/vulnhubmanagement
+configdir=/etc/vulhubmanagement
 
 set +e
 sudo mkdir $configdir 2> /dev/null
 set -e
 
 # something must
-for filename in requirements.txt .gitignore vulnhubmanagement.sh vulnhub
+for filename in requirements.txt .gitignore vulhubmanagement.sh vulnerability
 do
 	sudo cp -r $filename $configdir
 done
@@ -148,7 +148,7 @@ sudo systemctl daemon-reload
 
 echo ""
 echo ""
-echo "Vulnhub Management Service install.sh complete."
+echo "Vulhub Management Service install.sh complete."
 echo "please request your certificate from ca (or you can just use self signed certificate and put your server certificate and server private key in $configdir name to server.crt and server.key ."
-echo "Then you can use systemctl start vulnhubmanagement.service to start the service"
-echo "If you want to auto run on boot please type 'systemctl enable vulnhubmanagement.service'"
+echo "Then you can use systemctl start vulhubmanagement.service to start the service"
+echo "If you want to auto run on boot please type 'systemctl enable vulhubmanagement.service'"

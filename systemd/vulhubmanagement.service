@@ -1,0 +1,11 @@
+[Unit]
+Description=Start Vulhub Management Service
+After=network.target
+
+[Service]
+WorkingDirectory=/etc/vulhubmanagement
+ExecStart=/etc/vulhubmanagement/vulhubmanagement.sh
+
+
+[Install]
+WantedBy=multi-user.target
