@@ -1,5 +1,5 @@
 venv/*
-__pycache__/*
+**/__pycache__/
 server.crt
 server.key
 install-man-page.sh
