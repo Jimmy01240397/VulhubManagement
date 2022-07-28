@@ -82,4 +82,4 @@ nothing to commit, working tree clean
 - Run `docker exec -it -rm vulhubManagement /bin/sh` to get a shell inside the web container.
 - Only mount `src/` and `vulnerability/` in container, and any change under them will trigger the flask to reload
   - Any change outside them would not take effect. You should run `docker compose -f docker-compose-dev.yml build` to rebuild it.
-  - TODO: make python dependency sync between host and container.
+  - ~~TODO: make python dependency sync between host and container.~~

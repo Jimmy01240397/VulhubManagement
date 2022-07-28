@@ -11,10 +11,20 @@ services:
       - FLASK_APP=/app/src/web/main
       - FLASK_ENV=development
     build:
-      context: .
       dockerfile: ./Dockerfile-web
     ports:
       - 5000:5000
     volumes:
       - ./src:/app/src
       - ./vulnerability/:/app/vulnerability
+  composer:
+    container_name: vulhubComposer
+    privileged: true
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./src:/app/src
+      - ./vulnerability/:/app/vulnerability
+      - /var/run/docker.sock:/var/run/docker.sock
+    build:
+      dockerfile: ./Dockerfile-composer
