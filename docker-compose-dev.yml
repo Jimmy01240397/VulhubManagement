@@ -10,6 +10,7 @@ services:
     environment:
       - FLASK_APP=/app/src/web/main
       - FLASK_ENV=development
+      - COMPOSER_MODULE=src.composer
     build:
       dockerfile: ./Dockerfile-web
     ports:
