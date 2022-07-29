@@ -1,6 +1,16 @@
-from flask import Flask, request, render_template, redirect, Response, make_response, jsonify
+from flask import (
+    Flask,
+    request,
+    render_template,
+    redirect,
+    Response,
+    make_response,
+    jsonify,
+)
 import json
 import os
+
+import markdown
 from . import composer_api
 from ..config import *
 
@@ -19,10 +29,22 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/vuldetail/<int:vulid>", methods=["GET"])
+@app.route("/vuldetail/<vulid>", methods=["GET"])
 def get_vuldetail(vulid):
-
-    return render_template("vuldetail.jinja2", vulid=vulid)
+    readme = "Not found"
+    vultarget = ""
+    vulid = vulid.upper()
+    for r, _, _ in os.walk(VULS_ROOT):
+        if vulid in r:
+            app.logger.debug(f"Found {r=}")
+        if vulid in r and os.path.isfile(f"{r}/README.md"):
+            readme = open(f"{r}/README.md", "r").read()
+            vultarget = r[len(VULS_ROOT) :]
+            break
+    detail = markdown.markdown(readme)
+    return render_template(
+        "vuldetail.jinja2", detail=detail, vulid=vulid, vultarget=vultarget
+    )
 
 
 # Get the json format list of available vulhub
@@ -47,7 +69,6 @@ def list_vuls():
 @app.route("/vultargets", methods=["GET"])
 def get_vultargets():
     return json.dumps(composer_api.get_compose_status())
-    
 
 
 # Create vultarget
