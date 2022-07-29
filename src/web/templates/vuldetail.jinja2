@@ -27,8 +27,11 @@
           {{ cve-id }}
         </h2>
           <div align="right" style="position:relative;top:10px">
-      <button type="button" class="btn btn-md btn-success">
+      <button type="button" onclick="deply_machine();" id="deply_btn" class="btn btn-md btn-success">
         Deply
+      </button>
+      <button type="button" onclick="stop_machine();" id="stop_btn" disabled=true class="btn btn-danger">
+        Stop Deply
       </button>
         </div>
         <p>
@@ -39,7 +42,29 @@
   </div>
 </div>
 <script>
-  
+  function deply_machine(){
+   var xhr = new XMLHttpRequest();
+   document.getElementById("deply_btn").disabled = 'true';
+   document.getElementById("stop_btn").disabled = undefined;
+    xhr.open("POST", deply, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        deply_machine: true
+    }));
+  }
+
+  function stop_machine(){
+   var xhr = new XMLHttpRequest();
+   document.getElementById("stop_btn").disabled = 'false';
+   document.getElementById("deply_btn").disabled = undefined;
+    xhr.open("POST", deply, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        deply_machine: false
+    }));
+  }
+
+
 </script>
 </body>
 </html>
