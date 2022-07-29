@@ -21,16 +21,13 @@ app = Flask(__name__)
 
 app.logger.info(f"{COMPOSER_MODULE=}")
 
-
-@app.route("/hello")
-def hello_world():
-    return "<p> hello World</p>"
-
-
 @app.route("/")
 def index():
     return render_template("index.html")
 
+@app.route("/upload")
+def upload():
+    return render_template("upload.html")
 
 @app.route("/vuldetail/vulndata/<path:vulid>", methods=["GET"])
 def get_vulndata(vulid):
