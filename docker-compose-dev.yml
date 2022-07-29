@@ -37,3 +37,8 @@ services:
       dockerfile: ./Dockerfile-shell
     ports:
       - 6464:3000
+    networks:
+      - independ
+networks:
+  independ:
+    name: vulhubshell_independ

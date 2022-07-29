@@ -38,7 +38,8 @@ def compose_down(vultarget):
     r.delete("stopping:" + vultarget)
 
 
-def connect_network(vulid):
+def connect_network(vulid: str):
+    vulid = vulid.lower()
     networks = (
         subprocess.run(
             ["docker", "network", "ls", "--format='{{ .Name }}'"], capture_output=True
@@ -54,6 +55,26 @@ def connect_network(vulid):
         return
     # vulnerable?
     completed = subprocess.run(["docker", "network", "connect", name, "vulhubShell"])
+    return
+
+
+def disconnect_network(vulid: str):
+    vulid = vulid.lower()
+    networks = (
+        subprocess.run(
+            ["docker", "network", "ls", "--format='{{ .Name }}'"], capture_output=True
+        )
+        .stdout.decode()
+        .replace("'", "")
+        .split("\n")
+    )  # > <
+    name = f"{vulid}_default"
+    if name not in networks:
+        print(networks)
+        print(f"{name} network not exist")
+        return
+    # vulnerable?
+    completed = subprocess.run(["docker", "network", "disconnect", name, "vulhubShell"])
     return
 
 

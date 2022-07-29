@@ -52,7 +52,7 @@ def get_vuldetail(vulid):
     if os.path.isfile(f"vulnerability/{path}/README.md"):
         with open(f"vulnerability/{path}/README.md") as f:
             readme = f.read()
-            changeimg = re.findall(r"(\!\[\]\((.*)\))", readme)
+            changeimg = re.findall(r"(\!\[.*?\]\((.*?)\))", readme)
             for a in changeimg:
                 if os.path.isfile(f"vulnerability/{path}/{a[1]}"):
                     readme = readme.replace(a[0], f"![](vulndata/{path}/{a[1]})")
@@ -70,11 +70,14 @@ def get_vuldetail(vulid):
     )
 
 
-@app.route("/jail/network/<name>", methods=["POST"])
-def connect_jail_network(name):
-
-    composer_api.send_connect_network(name)
-    return {"msg": f"try connect to {name} network"}
+@app.route("/jail/network/<name>", methods=["POST", "DELETE"])
+def manage_jail_network(name):
+    if request.method == "POST":
+        composer_api.send_connect_network(name)
+        return {"msg": f"try connect to {name} network"}
+    if request.method == "DELETE":
+        composer_api.send_disconnect_network(name)
+        return {"msg": f"try disconnect to {name} network"}
 
 
 # Get the json format list of available vulhub

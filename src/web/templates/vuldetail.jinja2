@@ -129,6 +129,7 @@
   }
 
   function stop_machine(){
+      disconnect_vultarget()
       config = {
 	  data: JSON.stringify({"vultarget": cvepath}),
 	  headers: {
@@ -153,7 +154,16 @@
       fetch(`/jail/network/${name}`, {method:'POST'})
       .then((res)=>(res.json()))
       .then((data)=>{console.log(data)})
+    }
+  }
 
+    function disconnect_vultarget() {
+    if(vulnstatus && vulnstatus.running.includes(cvepath)) {
+      let t = cvepath.split('/')
+      let name = t[t.length-1]
+      fetch(`/jail/network/${name}`, {method:'DELETE'})
+      .then((res)=>(res.json()))
+      .then((data)=>{console.log(data)})
     }
   }
   init();

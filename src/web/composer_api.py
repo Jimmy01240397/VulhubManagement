@@ -37,3 +37,8 @@ def get_compose_status():
 def send_connect_network(vulid):
     q.enqueue(f"{COMPOSER_MODULE}.connect_network", vulid)
     return
+
+
+def send_disconnect_network(vulid):
+    q.enqueue(f"{COMPOSER_MODULE}.disconnect_network", vulid)
+    return
