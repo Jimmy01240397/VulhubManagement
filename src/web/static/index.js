@@ -10,7 +10,7 @@ axios.get("/list")
 	    ul.appendChild(li);
 	    var form = document.createElement("form");
 	    form.method = "post";
-	    form.action = "/vulndeply/" + item.split('/')[2];
+	    form.action = "/vuldetail/" + item.split('/')[2];
 	    var id = item;
 	    li.appendChild(form);
 	    var cveid = document.createElement("input");

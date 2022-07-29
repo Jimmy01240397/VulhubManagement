@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/sindresorhus/github-markdown-css/main/github-markdown.css">
 
-    <title>Vulnhub Fast Deply Manager</title>
+    <title>Vulnhub Fast Deploy Manager</title>
   </head>
 <body>
     <!-- Optional JavaScript -->
@@ -43,18 +43,18 @@
       </h1>
       <div class="jumbotron">
         <h2>
-          {{ cve_id }}
+          {{ vulid }}
         </h2>
           <div align="right" style="position:relative;top:10px">
       <button type="button" onclick="deply_machine();" id="deply_btn" disabled=true class="btn btn-md btn-success">
-        Deply
+        Deploy
       </button>
       <button type="button" onclick="stop_machine();" id="stop_btn" disabled=true class="btn btn-danger">
-        Stop Deply
+        Stop Deploy
       </button>
         </div>
         <p>
-          {{ readme_md }}
+          {{ detail }}
         </p>
 	<p><h1>Docker compose file</h1></p>
         <p>

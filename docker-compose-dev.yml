@@ -11,6 +11,7 @@ services:
       - FLASK_APP=/app/src/web/main
       - FLASK_ENV=development
       - COMPOSER_MODULE=src.composer
+      - VULS_ROOT=/app/vulnerability
     build:
       dockerfile: ./Dockerfile-web
     ports:

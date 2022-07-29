@@ -1,8 +1,17 @@
-from flask import Flask, request, render_template, redirect, Response, make_response, jsonify, send_file
 import json
 import os
 import sys
 import re
+from flask import (
+    Flask,
+    request,
+    render_template,
+    redirect,
+    Response,
+    make_response,
+    jsonify,
+    send_file,
+)
 import markdown
 from . import composer_api
 from ..config import *
@@ -21,24 +30,24 @@ def hello_world():
 def index():
     return render_template("index.html")
 
+@app.route("/vuldetail/vulndata/<path:vulid>", methods=["GET"])
+def get_vulndata(vulid):
+    return send_file('/app/vulnerability/' + vulid)
 
-@app.route("/vulndeply/<path:vulid>", methods=["POST"])
+@app.route("/vuldetail/<path:vulid>", methods=["POST"])
 def get_vuldetail(vulid):
-    with open('vulnerability/' + request.form['cveid'] + '/README.md') as f:
-        readme = f.read()
-        changeimg = re.findall(r'(\!\[\]\((.*)\))', readme)
-        for a in changeimg:
-            if os.path.isfile('vulnerability/' + request.form['cveid'] + '/' + a[1]):
-                readme = readme.replace(a[0], '![](vulndata/' + request.form['cveid'] + '/' + a[1] + ')')
-        readme = markdown.markdown(readme, extensions=['tables','fenced_code'])
+    if os.path.isfile('vulnerability/' + request.form['cveid'] + '/README.md'):
+        with open('vulnerability/' + request.form['cveid'] + '/README.md') as f:
+            readme = f.read()
+            changeimg = re.findall(r'(\!\[\]\((.*)\))', readme)
+            for a in changeimg:
+                if os.path.isfile('vulnerability/' + request.form['cveid'] + '/' + a[1]):
+                    readme = readme.replace(a[0], '![](vulndata/' + request.form['cveid'] + '/' + a[1] + ')')
+            readme = markdown.markdown(readme, extensions=['tables','fenced_code'])
     with open('vulnerability/' + request.form['cveid'] + '/docker-compose.yml') as f:
         docker = '``` yaml\n' + f.read() + '\n```'
         docker = markdown.markdown(docker, extensions=['tables','fenced_code'])
-    return render_template("vuldetail.jinja2", cve_id=vulid, readme_md=readme, docker_compose = docker, cve_path=request.form['cveid'])
-
-@app.route("/vulndeply/vulndata/<path:vulid>", methods=["GET"])
-def get_vulndata(vulid):
-    return send_file('/app/vulnerability/' + vulid)
+    return render_template("vuldetail.jinja2", vulid=vulid, detail=readme, docker_compose = docker, cve_path=request.form['cveid'])
 
 # Get the json format list of available vulhub
 @app.route("/list", methods=["GET"])
@@ -50,7 +59,7 @@ def list_vuls():
         if not os.path.isdir('vulnerability/' + d):
             continue
         for subd in os.listdir('vulnerability/' + d):
-            if subd[0] != '.':
+            if subd[0] != '.' and subd != 'base':
                 dirs.append((f"{d}/{subd}", layer + 1))
         # TODO maybe not layer 2?
         if layer == 3:
@@ -63,7 +72,6 @@ def list_vuls():
 @app.route("/vultargets", methods=["GET"])
 def get_vultargets():
     return json.dumps(composer_api.get_compose_status())
-    
 
 
 # Create vultarget
