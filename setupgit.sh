@@ -32,7 +32,9 @@ do
     fi
 done
 
+mkdir systemd
+
 for a in $systemd
 do
-    sudo cp /etc/systemd/system/$a $a
+    sudo cp /etc/systemd/system/$a systemd/$a
 done
