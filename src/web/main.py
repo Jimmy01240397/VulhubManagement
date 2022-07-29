@@ -49,6 +49,11 @@ def get_vuldetail(vulid):
         docker = markdown.markdown(docker, extensions=['tables','fenced_code'])
     return render_template("vuldetail.jinja2", vulid=vulid, detail=readme, docker_compose = docker, cve_path=request.form['cveid'])
 
+@app.route("/jail/network/<name>", methods=["POST"])
+def connect_jail_network(name):
+    os.system("docker network")
+
+
 # Get the json format list of available vulhub
 @app.route("/list", methods=["GET"])
 def list_vuls():

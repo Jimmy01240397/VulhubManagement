@@ -31,3 +31,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     build:
       dockerfile: ./Dockerfile-composer
+  shell:
+    build:
+      dockerfile: ./Dockerfile-shell
+    ports:
+      - 3000:3000
