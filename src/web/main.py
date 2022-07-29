@@ -16,7 +16,7 @@ def hello_world():
 
 @app.route("/")
 def index():
-    return "Index of /\n\t/etc/shadow\n\t/etc/passwd"
+    return render_template("index.html")
 
 
 @app.route("/vuldetail/<int:vulid>", methods=["GET"])
