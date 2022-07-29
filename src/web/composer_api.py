@@ -11,7 +11,7 @@ r = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
 
 def send_compose_up(vultarget):
     if r.get("upping:" + vultarget) == None and r.get("running:" + vultarget) == None:
-        q.enqueue(f"{COMPOSER_MODULE}.compose_up", vultarget)
+        q.enqueue(f"{COMPOSER_MODULE}.compose_up", vultarget, job_timeout="5m")
         r.set("upping:" + vultarget, vultarget)
     return
 
