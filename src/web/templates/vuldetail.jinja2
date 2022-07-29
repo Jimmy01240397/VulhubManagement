@@ -45,14 +45,22 @@
         <h2>
           {{ vulid }}
         </h2>
-          <div align="right" style="position:relative;top:10px">
-      <button type="button" onclick="deply_machine();" id="deply_btn" disabled=true class="btn btn-md btn-success">
-        Deploy
-      </button>
-      <button type="button" onclick="stop_machine();" id="stop_btn" disabled=true class="btn btn-danger">
-        Stop Deploy
-      </button>
+        <div align="right" style="position:relative;top:10px">
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#tty" aria-expanded="false" aria-controls="tty">
+            Terminal
+          </button>
+          <button type="button" onclick="deply_machine();" id="deply_btn" disabled=true class="btn btn-md btn-success">
+            Deploy
+          </button>
+          <button type="button" onclick="stop_machine();" id="stop_btn" disabled=true class="btn btn-danger">
+            Stop Deploy
+          </button>
         </div>
+      <div class="collapse" id="tty">
+        <div class="card card-body">
+          <iframe src='http://127.0.0.1:6464/wetty'></iframe>
+        </div>
+      </div>
         <p>
           {{ detail }}
         </p>
@@ -67,7 +75,7 @@
   </div>
 </div>
 <script>
-    var cvepath = "{{ cve_path }}"
+    var cvepath = "{{ vul_path }}"
     var deply = document.getElementById("deply_btn");
     var stopdeply = document.getElementById("stop_btn");
 

@@ -35,4 +35,4 @@ services:
     build:
       dockerfile: ./Dockerfile-shell
     ports:
-      - 3000:3000
+      - 6464:3000

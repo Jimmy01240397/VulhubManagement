@@ -1,6 +1,6 @@
 FROM wettyoss/wetty:latest
 RUN apk add shadow
 RUN useradd test -m -p '$6$i.ZZMthHByCykiHK$M4F5gOOzPSv5Dj1Mys4qiZw/t5WzJpemDY5O93gyB4ivoMPEGK6fNR.XcL9r/DKzuwCP5U.OYmFticyYqWgHw0'
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "start", "--allow-iframe"]
 
 

@@ -11,6 +11,7 @@ from flask import (
     make_response,
     jsonify,
     send_file,
+    abort,
 )
 import markdown
 from . import composer_api
@@ -30,24 +31,39 @@ def hello_world():
 def index():
     return render_template("index.html")
 
+
 @app.route("/vuldetail/vulndata/<path:vulid>", methods=["GET"])
 def get_vulndata(vulid):
-    return send_file('/app/vulnerability/' + vulid)
+    return send_file("/app/vulnerability/" + vulid)
 
-@app.route("/vuldetail/<path:vulid>", methods=["POST"])
+
+@app.route("/vuldetail/<path:vulid>", methods=["GET"])
 def get_vuldetail(vulid):
-    if os.path.isfile('vulnerability/' + request.form['cveid'] + '/README.md'):
-        with open('vulnerability/' + request.form['cveid'] + '/README.md') as f:
+    path = request.args.get("path", "")
+    readme = ""
+    docker = ""
+    if path == "" or not os.path.isdir(f"vulnerability/{path}"):
+        abort(404)
+    if os.path.isfile(f"vulnerability/{path}/README.md"):
+        with open(f"vulnerability/{path}/README.md") as f:
             readme = f.read()
-            changeimg = re.findall(r'(\!\[\]\((.*)\))', readme)
+            changeimg = re.findall(r"(\!\[\]\((.*)\))", readme)
             for a in changeimg:
-                if os.path.isfile('vulnerability/' + request.form['cveid'] + '/' + a[1]):
-                    readme = readme.replace(a[0], '![](vulndata/' + request.form['cveid'] + '/' + a[1] + ')')
-            readme = markdown.markdown(readme, extensions=['tables','fenced_code'])
-    with open('vulnerability/' + request.form['cveid'] + '/docker-compose.yml') as f:
-        docker = '``` yaml\n' + f.read() + '\n```'
-        docker = markdown.markdown(docker, extensions=['tables','fenced_code'])
-    return render_template("vuldetail.jinja2", vulid=vulid, detail=readme, docker_compose = docker, cve_path=request.form['cveid'])
+                if os.path.isfile(f"vulnerability/{path}/{a[1]}"):
+                    readme = readme.replace(a[0], f"![](vulndata/{path}/{a[1]})")
+            readme = markdown.markdown(readme, extensions=["tables", "fenced_code"])
+    if os.path.isfile(f"vulnerability/{path}/docker-compose.yml"):
+        with open(f"vulnerability/{path}/docker-compose.yml") as f:
+            docker = f"``` yaml\n{f.read()}\n```"
+            docker = markdown.markdown(docker, extensions=["tables", "fenced_code"])
+    return render_template(
+        "vuldetail.jinja2",
+        vulid=vulid,
+        detail=readme,
+        docker_compose=docker,
+        vul_path=path,
+    )
+
 
 @app.route("/jail/network/<name>", methods=["POST"])
 def connect_jail_network(name):
@@ -61,14 +77,14 @@ def list_vuls():
     output = []
 
     for d, layer in dirs:
-        if not os.path.isdir('vulnerability/' + d):
+        if not os.path.isdir("vulnerability/" + d):
             continue
-        for subd in os.listdir('vulnerability/' + d):
-            if subd[0] != '.' and subd != 'base':
+        for subd in os.listdir("vulnerability/" + d):
+            if subd[0] != "." and subd != "base":
                 dirs.append((f"{d}/{subd}", layer + 1))
         # TODO maybe not layer 2?
         if layer == 3:
-            output.append(d.strip('/'))
+            output.append(d.strip("/"))
 
     return json.dumps(output)
 
