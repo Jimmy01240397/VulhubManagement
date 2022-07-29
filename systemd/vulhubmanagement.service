@@ -3,8 +3,11 @@ Description=Start Vulhub Management Service
 After=network.target
 
 [Service]
+type=oneshot
+RemainAfterExit=yes
 WorkingDirectory=/etc/vulhubmanagement
-ExecStart=/etc/vulhubmanagement/vulhubmanagement.sh
+ExecStart=/usr/bin/docker-compose -f docker-compose-dev.yml up -d
+ExecStop=/usr/bin/docker-compose -f docker-compose-dev.yml down
 
 
 [Install]

@@ -95,12 +95,18 @@ sudo apt-get install -y docker.io
 
 arch=$(dpkg --print-architecture)
 
-if [ "$(type yq)" == "" ]
+if [ "$(type docker-compose)" == "" ]
 then
-	wget https://github.com/mikefarah/yq/releases/download/v4.17.2/yq_linux_${arch}.tar.gz -O - | tar xz && sudo mv yq_linux_${arch} /usr/local/bin/yq
+	wget https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64
+	sudo mv docker-compose-linux-x86_64 /usr/bin/docker-compose
 fi
 
-git submodule update
+if [ "$(type yq)" == "" ]
+then
+	sudo wget https://github.com/mikefarah/yq/releases/download/v4.17.2/yq_linux_${arch}.tar.gz -O - | tar xz && sudo mv yq_linux_${arch} /usr/local/bin/yq
+fi
+
+git submodule update --init --recursive
 
 configdir=/etc/vulhubmanagement
 
@@ -109,25 +115,25 @@ sudo mkdir $configdir 2> /dev/null
 set -e
 
 # something must
-for filename in requirements.txt .gitignore vulhubmanagement.sh vulhubmanagement.py vulnerability
+for filename in .gitignore vulhubmanagement.sh vulnerability src Dockerfile-composer Dockerfile-shell Dockerfile-web docker-compose-dev.yml 
 do
 	sudo cp -r $filename $configdir
 done
 
 # some config 
-for filename in 
-do
-	if [ ! -f $configdir/$filename ]
-	then
-		sudo cp -r $filename $configdir
-	fi
-done
+#for filename in 
+#do
+#	if [ ! -f $configdir/$filename ]
+#	then
+#		sudo cp -r $filename $configdir
+#	fi
+#done
 
 # some exce
-for filename in 
-do
-	sudo chmod +x $configdir/$filename
-done
+#for filename in 
+#do
+#	sudo chmod +x $configdir/$filename
+#done
 sudo cp systemd/* /etc/systemd/system/
 
 cd $configdir
@@ -137,12 +143,12 @@ then
 	sudo openssl req -x509 -new -nodes -days 3650 -newkey 2048 -keyout server.key -out server.crt -subj "/CN=$(hostname)"
 fi
 
-$INSTALL_PYTHON_PATH -m venv venv
-. ./venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install wheel
-python -m pip install -r requirements.txt
-deactivate
+#$INSTALL_PYTHON_PATH -m venv venv
+#. ./venv/bin/activate
+#python -m pip install --upgrade pip
+#python -m pip install wheel
+#python -m pip install -r requirements.txt
+#deactivate
 
 sudo systemctl daemon-reload
 

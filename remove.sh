@@ -9,7 +9,7 @@ sudo rm /etc/systemd/system/$a.service
 configdir=/etc/vulhubmanagement
 
 # something need to delete
-for filename in __pycache__ requirements.txt venv .gitignore vulhubmanagement.sh vulhubmanagement.py vulnerability
+for filename in __pycache__ venv .gitignore vulhubmanagement.sh vulnerability src Dockerfile-composer Dockerfile-shell Dockerfile-web docker-compose-dev.yml 
 do
 	sudo rm -r $configdir/$filename
 done

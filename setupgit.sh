@@ -7,12 +7,14 @@ git clone https://github.com/Jimmy01240397/VulhubManagement
 
 cd VulhubManagement
 
+git submodule update --init --recursive
+
 systemd=$(ls systemd)
 
 for a in $(ls -a)
 do
     # some shell that didn't copy to configdir or some config
-    if [ "$a" != "." ] && [ "$a" != ".." ] && [ "$a" != ".git" ] && [ "$a" != "README.md" ] && [ "$a" != "install.sh" ] && [ "$a" != "remove.sh" ] && [ "$a" != "setupgit.sh" ]
+    if [ "$a" != "." ] && [ "$a" != ".." ] && [ "$a" != ".git" ] && [ "$a" != ".gitmodules" ] && [ "$a" != "README.md" ] && [ "$a" != "LICENSE" ] && [ "$a" != "install.sh" ] && [ "$a" != "remove.sh" ] && [ "$a" != "setupgit.sh" ]
     then
         rm -rf $a
     fi
