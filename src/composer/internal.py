@@ -1,6 +1,9 @@
 import subprocess
 import os
-from ..config import VULS_ROOT
+import redis
+from ..config import VULS_ROOT, COMPOSER_NAME, COMPOSER_MODULE, REDIS_HOST, REDIS_PORT
+
+r = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
 
 # if non exist return None
 def get_context_path(vultarget) -> 'str | None':
@@ -9,10 +12,12 @@ def get_context_path(vultarget) -> 'str | None':
 
 # make it vulnerable ?
 def compose_up(vultarget):
+  r.delete('upping:' + vultarget)
   context_path = get_context_path(vultarget)
   if context_path != None:
     completed = subprocess.run(f"cd {context_path} && docker-compose up -d", shell=True)
     if completed.returncode == 0:
+      r.set('running:' + vultarget, vultarget)
       return 
 
 
@@ -22,6 +27,7 @@ def compose_down(vultarget):
   if context_path != None:
     completed = subprocess.run(f"cd {context_path} && docker-compose down", shell=True)
     if completed.returncode == 0:
+      r.delete('running:' + vultarget)
       return 
       
 

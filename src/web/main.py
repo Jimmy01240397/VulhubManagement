@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, Response, make_response
+from flask import Flask, request, render_template, redirect, Response, make_response, jsonify
 import json
 import os
 from . import composer_api
@@ -46,7 +46,8 @@ def list_vuls():
 # get list of running/upping vultargets
 @app.route("/vultargets", methods=["GET"])
 def get_vultargets():
-    pass
+    return json.dumps(composer_api.get_compose_status())
+    
 
 
 # Create vultarget
