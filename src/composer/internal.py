@@ -12,13 +12,12 @@ def get_context_path(vultarget) -> 'str | None':
 
 # make it vulnerable ?
 def compose_up(vultarget):
-  r.delete('upping:' + vultarget)
   context_path = get_context_path(vultarget)
   if context_path != None:
     completed = subprocess.run(f"cd {context_path} && docker-compose up -d", shell=True)
     if completed.returncode == 0:
       r.set('running:' + vultarget, vultarget)
-      return 
+  r.delete('upping:' + vultarget)
 
 
 
@@ -28,7 +27,7 @@ def compose_down(vultarget):
     completed = subprocess.run(f"cd {context_path} && docker-compose down", shell=True)
     if completed.returncode == 0:
       r.delete('running:' + vultarget)
-      return 
+  r.delete('stopping:' + vultarget)
       
 
 def is_running(vultarget):

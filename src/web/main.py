@@ -1,6 +1,9 @@
-from flask import Flask, request, render_template, redirect, Response, make_response, jsonify
+from flask import Flask, request, render_template, redirect, Response, make_response, jsonify, send_file
 import json
 import os
+import sys
+import re
+import markdown
 from . import composer_api
 from ..config import *
 
@@ -19,26 +22,39 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/vuldetail/<int:vulid>", methods=["GET"])
+@app.route("/vulndeply/<path:vulid>", methods=["POST"])
 def get_vuldetail(vulid):
+    with open('vulnerability/' + request.form['cveid'] + '/README.md') as f:
+        readme = f.read()
+        changeimg = re.findall(r'(\!\[\]\((.*)\))', readme)
+        for a in changeimg:
+            if os.path.isfile('vulnerability/' + request.form['cveid'] + '/' + a[1]):
+                readme = readme.replace(a[0], '![](vulndata/' + request.form['cveid'] + '/' + a[1] + ')')
+        readme = markdown.markdown(readme, extensions=['tables','fenced_code'])
+    with open('vulnerability/' + request.form['cveid'] + '/docker-compose.yml') as f:
+        docker = '``` yaml\n' + f.read() + '\n```'
+        docker = markdown.markdown(docker, extensions=['tables','fenced_code'])
+    return render_template("vuldetail.jinja2", cve_id=vulid, readme_md=readme, docker_compose = docker, cve_path=request.form['cveid'])
 
-    return render_template("vuldetail.jinja2", vulid=vulid)
-
+@app.route("/vulndeply/vulndata/<path:vulid>", methods=["GET"])
+def get_vulndata(vulid):
+    return send_file('/app/vulnerability/' + vulid)
 
 # Get the json format list of available vulhub
 @app.route("/list", methods=["GET"])
 def list_vuls():
-    dirs = [("./vulnerability", 0)]
+    dirs = [("", 0)]
     output = []
 
     for d, layer in dirs:
-        if not os.path.isdir(d):
+        if not os.path.isdir('vulnerability/' + d):
             continue
-        for subd in os.listdir(d):
-            dirs.append((f"{d}/{subd}", layer + 1))
+        for subd in os.listdir('vulnerability/' + d):
+            if subd[0] != '.':
+                dirs.append((f"{d}/{subd}", layer + 1))
         # TODO maybe not layer 2?
         if layer == 3:
-            output.append(d)
+            output.append(d.strip('/'))
 
     return json.dumps(output)
 
