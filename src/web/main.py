@@ -21,13 +21,21 @@ app = Flask(__name__)
 
 app.logger.info(f"{COMPOSER_MODULE=}")
 
+
+@app.route("/hello")
+def hello_world():
+    return "<p> hello World</p>"
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 @app.route("/upload")
 def upload():
     return render_template("upload.html")
+
 
 @app.route("/vuldetail/vulndata/<path:vulid>", methods=["GET"])
 def get_vulndata(vulid):
@@ -64,7 +72,9 @@ def get_vuldetail(vulid):
 
 @app.route("/jail/network/<name>", methods=["POST"])
 def connect_jail_network(name):
-    os.system("docker network")
+
+    composer_api.send_connect_network(name)
+    return {"msg": f"try connect to {name} network"}
 
 
 # Get the json format list of available vulhub

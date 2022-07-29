@@ -32,6 +32,7 @@ services:
     build:
       dockerfile: ./Dockerfile-composer
   shell:
+    container_name: vulhubShell
     build:
       dockerfile: ./Dockerfile-shell
     ports:

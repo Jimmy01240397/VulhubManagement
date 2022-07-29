@@ -46,7 +46,7 @@
           {{ vulid }}
         </h2>
         <div align="right" style="position:relative;top:10px">
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#tty" aria-expanded="false" aria-controls="tty">
+          <button class="btn btn-primary" type="button" onclick='connect_vultarget();' data-toggle="collapse" data-target="#tty" aria-expanded="false" aria-controls="tty">
             Terminal
           </button>
           <button type="button" onclick="deply_machine();" id="deply_btn" disabled=true class="btn btn-md btn-success">
@@ -58,6 +58,7 @@
         </div>
       <div class="collapse" id="tty">
         <div class="card card-body">
+          <p> username: test, password: test </p>
           <iframe src='http://127.0.0.1:6464/wetty'></iframe>
         </div>
       </div>
@@ -78,12 +79,12 @@
     var cvepath = "{{ vul_path }}"
     var deply = document.getElementById("deply_btn");
     var stopdeply = document.getElementById("stop_btn");
-
+    var vulnstatus
     function init()
     {
 	axios.get("/vultargets")
 	.then( (res) => {
-	    var vulnstatus = res.data;
+	    vulnstatus = res.data;
 	    if(!vulnstatus.upping.includes(cvepath) && !vulnstatus.running.includes(cvepath))
 	    {
 		deply.disabled = false;
@@ -144,7 +145,17 @@
 	    console.log(err);
 	});
   }
-    
+  
+  function connect_vultarget() {
+    if(vulnstatus && vulnstatus.running.includes(cvepath)) {
+      let t = cvepath.split('/')
+      let name = t[t.length-1]
+      fetch(`/jail/network/${name}`, {method:'POST'})
+      .then((res)=>(res.json()))
+      .then((data)=>{console.log(data)})
+
+    }
+  }
   init();
   var interval = setInterval(init, 3000);
 
