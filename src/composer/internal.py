@@ -17,6 +17,8 @@ def compose_up(vultarget):
     completed = subprocess.run(f"cd {context_path} && docker-compose up -d", shell=True)
     if completed.returncode == 0:
       r.set('running:' + vultarget, vultarget)
+    else: 
+      subprocess.run(f"cd {context_path} && docker-compose down", shell=True)
   r.delete('upping:' + vultarget)
 
 
