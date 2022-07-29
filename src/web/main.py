@@ -14,6 +14,7 @@ from flask import (
     abort,
 )
 import markdown
+import zipfile
 from . import composer_api
 from ..config import *
 
@@ -78,6 +79,24 @@ def manage_jail_network(name):
     if request.method == "DELETE":
         composer_api.send_disconnect_network(name)
         return {"msg": f"try disconnect to {name} network"}
+
+
+@app.route("/vulnupload", methods=["POST"])
+def onupload():
+    zipdata = request.files['vulnfile']
+    if not os.path.isdir('vulnerability/uploaded'):
+        os.mkdir('vulnerability/uploaded')
+    if request.form['machinename'] != '' and request.form['cveid'] != '':
+        if not os.path.isdir('vulnerability/uploaded/' + request.form['machinename']):
+            os.mkdir('vulnerability/uploaded/' + request.form['machinename'])
+        if not os.path.isdir('vulnerability/uploaded/' + request.form['machinename'] + '/' + request.form['cveid']):
+            os.mkdir('vulnerability/uploaded/' + request.form['machinename'] + '/' + request.form['cveid'])
+        filename = zipdata.filename
+        zipdata.save(os.path.join('/tmp', filename))
+        with zipfile.ZipFile(os.path.join('/tmp', filename),"r") as zip_ref:
+            zip_ref.extractall('vulnerability/uploaded/' + request.form['machinename'] + '/' + request.form['cveid'])
+    return 'ok'
+
 
 
 # Get the json format list of available vulhub

@@ -3,8 +3,8 @@ FROM python:3.9.2-alpine
 WORKDIR /app
 EXPOSE 5000
 
-RUN adduser -D app
-USER app
+#RUN adduser -D app
+#USER app
 
 COPY ./src/requirements.txt .
 RUN pip install -r requirements.txt

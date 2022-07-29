@@ -4,9 +4,9 @@ axios
   .get('/list')
   .then((res) => {
     allvulns = res.data
-    var ul = document.getElementById('allvulns')
 
     allvulns.forEach(function (item, i) {
+      var ul = document.getElementById(item.split('/')[0])
       var li = document.createElement('li')
       ul.appendChild(li)
       var form = document.createElement('form')
