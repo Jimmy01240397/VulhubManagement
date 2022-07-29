@@ -27,11 +27,11 @@
           {{ cve-id }}
         </h2>
           <div align="right" style="position:relative;top:10px">
-      <button type="button" onclick="deply_machine();" id="deploy_btn" class="btn btn-md btn-success">
-        Deply
+      <button type="button" onclick="deploy_machine();" id="deploy_btn" class="btn btn-md btn-success">
+        Deploy
       </button>
       <button type="button" onclick="stop_machine();" id="stop_btn" disabled=true class="btn btn-danger">
-        Stop Deply
+        Stop Deploy
       </button>
         </div>
         <p>
@@ -42,14 +42,14 @@
   </div>
 </div>
 <script>
-  function deply_machine(){
+  function deploy_machine(){
    var xhr = new XMLHttpRequest();
    document.getElementById("deploy_btn").disabled = 'true';
    document.getElementById("stop_btn").disabled = undefined;
     xhr.open("POST", deploy, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
-        deply_machine: true
+        deploy_machine: true
     }));
   }
 
@@ -60,7 +60,7 @@
     xhr.open("POST", deploy, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
-        deply_machine: false
+        deploy_machine: false
     }));
   }
 
